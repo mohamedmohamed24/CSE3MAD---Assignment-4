@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 // Data for the activities list
 const ACTIVITIES = [
@@ -64,80 +63,75 @@ const ACTIVITIES = [
 
 export default function Dashboard() {
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 40 }}
-      >
-        {/* Dark Top Header */}
-        <View style={styles.headerBackground}>
-          <Text style={styles.headerTitle}>STEMM Lab</Text>
-          <Text style={styles.headerSubtitle}>Real-World Learning</Text>
-        </View>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      {/* Dark Top Header */}
+      <View style={styles.headerBackground}>
+        <Text style={styles.headerTitle}>STEMM Lab</Text>
+        <Text style={styles.headerSubtitle}>Real-World Learning</Text>
+      </View>
 
-        {/* Main Content Area (Overlaps the dark header) */}
-        <View style={styles.content}>
-          {/* Orange Team Card */}
-          <View style={styles.teamCard}>
-            <Text style={styles.teamTitle}>Team Phoenix</Text>
-            <Text style={styles.teamSubtitle}>Grade 6 • Team #247</Text>
+      {/* Main Content Area (Overlaps the dark header) */}
+      <View style={styles.content}>
+        {/* Orange Team Card */}
+        <View style={styles.teamCard}>
+          <Text style={styles.teamTitle}>Team Phoenix</Text>
+          <Text style={styles.teamSubtitle}>Grade 6 • Team #247</Text>
 
-            <View style={styles.statsRow}>
-              <View style={styles.statBox}>
-                <Text style={styles.statLabel}>Completed</Text>
-                <Text style={styles.statValue}>4/7</Text>
-              </View>
-              <View style={styles.statBox}>
-                <Text style={styles.statLabel}>Rank</Text>
-                <Text style={styles.statValue}>#12</Text>
-              </View>
-              <View style={styles.statBox}>
-                <Text style={styles.statLabel}>Points</Text>
-                <Text style={styles.statValue}>2.4K</Text>
-              </View>
+          <View style={styles.statsRow}>
+            <View style={styles.statBox}>
+              <Text style={styles.statLabel}>Completed</Text>
+              <Text style={styles.statValue}>4/7</Text>
+            </View>
+            <View style={styles.statBox}>
+              <Text style={styles.statLabel}>Rank</Text>
+              <Text style={styles.statValue}>#12</Text>
+            </View>
+            <View style={styles.statBox}>
+              <Text style={styles.statLabel}>Points</Text>
+              <Text style={styles.statValue}>2.4K</Text>
             </View>
           </View>
-
-          {/* Science Fact Card */}
-          <View style={styles.factCard}>
-            <View style={styles.factIconBox}>
-              <Ionicons name="bulb" size={20} color="#FFF" />
-            </View>
-            <View style={styles.factTextContainer}>
-              <Text style={styles.factTitle}>Science Fact of the Day</Text>
-              <Text style={styles.factBody}>
-                A parachute works by creating air resistance (drag force). The
-                larger the parachute's surface area, the more air it catches,
-                which slows down the fall.
-              </Text>
-            </View>
-          </View>
-
-          {/* Activities List */}
-          <Text style={styles.sectionTitle}>Activities</Text>
-
-          {ACTIVITIES.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.activityCard}
-              activeOpacity={0.7}
-            >
-              <View style={styles.activityIconBox}>
-                <Ionicons name={item.icon as any} size={24} color="#FFF" />
-              </View>
-
-              <View style={styles.activityInfo}>
-                <Text style={styles.activityTitle}>{item.title}</Text>
-                <Text style={styles.activityCategory}>{item.category}</Text>
-                <Text style={styles.activityDesc}>{item.desc}</Text>
-              </View>
-
-              <Ionicons name="chevron-forward" size={20} color="#CCC" />
-            </TouchableOpacity>
-          ))}
         </View>
-      </ScrollView>
-    </SafeAreaView>
+
+        {/* Science Fact Card */}
+        <View style={styles.factCard}>
+          <View style={styles.factIconBox}>
+            <Ionicons name="bulb" size={20} color="#FFF" />
+          </View>
+          <View style={styles.factTextContainer}>
+            <Text style={styles.factTitle}>Science Fact of the Day</Text>
+            <Text style={styles.factBody}>
+              A parachute works by creating air resistance (drag force). The
+              larger the parachute's surface area, the more air it catches,
+              which slows down the fall.
+            </Text>
+          </View>
+        </View>
+
+        {/* Activities List */}
+        <Text style={styles.sectionTitle}>Activities</Text>
+
+        {ACTIVITIES.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            style={styles.activityCard}
+            activeOpacity={0.7}
+          >
+            <View style={styles.activityIconBox}>
+              <Ionicons name={item.icon as any} size={24} color="#FFF" />
+            </View>
+
+            <View style={styles.activityInfo}>
+              <Text style={styles.activityTitle}>{item.title}</Text>
+              <Text style={styles.activityCategory}>{item.category}</Text>
+              <Text style={styles.activityDesc}>{item.desc}</Text>
+            </View>
+
+            <Ionicons name="chevron-forward" size={20} color="#CCC" />
+          </TouchableOpacity>
+        ))}
+      </View>
+    </ScrollView>
   );
 }
 
