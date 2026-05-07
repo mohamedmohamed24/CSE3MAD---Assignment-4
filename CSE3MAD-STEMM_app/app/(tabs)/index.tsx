@@ -1,98 +1,288 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+// Data for the activities list
+const ACTIVITIES = [
+  {
+    id: "1",
+    title: "Parachute Drop Challenge",
+    category: "Engineering",
+    desc: "Design and test parachutes to reduce landing speed",
+    icon: "rocket-outline",
+  },
+  {
+    id: "2",
+    title: "Sound Pollution Hunter",
+    category: "Environmental Science",
+    desc: "Measure and compare sound levels in different activities",
+    icon: "options-outline",
+  },
+  {
+    id: "3",
+    title: "Hand Fan Challenge",
+    category: "Physics",
+    desc: "Test how air movement affects flexible materials",
+    icon: "color-wand-outline",
+  },
+  {
+    id: "4",
+    title: "Earthquake-Resistant Structure",
+    category: "Engineering",
+    desc: "Design structures that withstand vibration",
+    icon: "business-outline",
+  },
+  {
+    id: "5",
+    title: "Human Performance Lab",
+    category: "Medical Science",
+    desc: "Measure speed, smoothness, and coordination",
+    icon: "pulse-outline",
+  },
+  {
+    id: "6",
+    title: "Reaction Board Challenge",
+    category: "Neuroscience",
+    desc: "Measure reaction time and coordination",
+    icon: "timer-outline",
+  },
+  {
+    id: "7",
+    title: "Breath Control Test",
+    category: "Physiology",
+    desc: "Measure lung capacity and breath control",
+    icon: "water-outline",
+  },
+];
 
-export default function HomeScreen() {
+export default function Dashboard() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
+        {/* Dark Top Header */}
+        <View style={styles.headerBackground}>
+          <Text style={styles.headerTitle}>STEMM Lab</Text>
+          <Text style={styles.headerSubtitle}>Real-World Learning</Text>
+        </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        {/* Main Content Area (Overlaps the dark header) */}
+        <View style={styles.content}>
+          {/* Orange Team Card */}
+          <View style={styles.teamCard}>
+            <Text style={styles.teamTitle}>Team Phoenix</Text>
+            <Text style={styles.teamSubtitle}>Grade 6 • Team #247</Text>
+
+            <View style={styles.statsRow}>
+              <View style={styles.statBox}>
+                <Text style={styles.statLabel}>Completed</Text>
+                <Text style={styles.statValue}>4/7</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statLabel}>Rank</Text>
+                <Text style={styles.statValue}>#12</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statLabel}>Points</Text>
+                <Text style={styles.statValue}>2.4K</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Science Fact Card */}
+          <View style={styles.factCard}>
+            <View style={styles.factIconBox}>
+              <Ionicons name="bulb" size={20} color="#FFF" />
+            </View>
+            <View style={styles.factTextContainer}>
+              <Text style={styles.factTitle}>Science Fact of the Day</Text>
+              <Text style={styles.factBody}>
+                A parachute works by creating air resistance (drag force). The
+                larger the parachute's surface area, the more air it catches,
+                which slows down the fall.
+              </Text>
+            </View>
+          </View>
+
+          {/* Activities List */}
+          <Text style={styles.sectionTitle}>Activities</Text>
+
+          {ACTIVITIES.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.activityCard}
+              activeOpacity={0.7}
+            >
+              <View style={styles.activityIconBox}>
+                <Ionicons name={item.icon as any} size={24} color="#FFF" />
+              </View>
+
+              <View style={styles.activityInfo}>
+                <Text style={styles.activityTitle}>{item.title}</Text>
+                <Text style={styles.activityCategory}>{item.category}</Text>
+                <Text style={styles.activityDesc}>{item.desc}</Text>
+              </View>
+
+              <Ionicons name="chevron-forward" size={20} color="#CCC" />
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: "#F7F8FA", // Light grey background
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  headerBackground: {
+    backgroundColor: "#000",
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    paddingBottom: 80, // Extra padding for orange card overlap
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  headerTitle: {
+    color: "#FFF",
+    fontSize: 28,
+    fontWeight: "bold",
+  },
+  headerSubtitle: {
+    color: "#999",
+    fontSize: 14,
+    marginTop: 4,
+  },
+  content: {
+    paddingHorizontal: 20,
+    marginTop: -50, // Pulls the content up to overlap the black header
+  },
+  teamCard: {
+    backgroundColor: "#FF5A00",
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: "#FF5A00",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  teamTitle: {
+    color: "#FFF",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  teamSubtitle: {
+    color: "rgba(255,255,255,0.8)",
+    fontSize: 12,
+    marginTop: 4,
+    marginBottom: 20,
+  },
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  statBox: {
+    backgroundColor: "rgba(0,0,0,0.15)",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 12,
+    flex: 1,
+    marginHorizontal: 4,
+  },
+  statLabel: {
+    color: "rgba(255,255,255,0.8)",
+    fontSize: 10,
+    marginBottom: 4,
+  },
+  statValue: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  factCard: {
+    backgroundColor: "#FFF",
+    borderRadius: 16,
+    padding: 16,
+    flexDirection: "row",
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: "#EFEFEF",
+  },
+  factIconBox: {
+    backgroundColor: "#FF5A00",
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+  factTextContainer: {
+    flex: 1,
+  },
+  factTitle: {
+    fontWeight: "bold",
+    fontSize: 14,
+    color: "#333",
+    marginBottom: 4,
+  },
+  factBody: {
+    fontSize: 12,
+    color: "#666",
+    lineHeight: 18,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginTop: 25,
+    marginBottom: 15,
+  },
+  activityCard: {
+    backgroundColor: "#FFF",
+    borderRadius: 16,
+    padding: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#EFEFEF",
+  },
+  activityIconBox: {
+    backgroundColor: "#FF5A00",
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 15,
+  },
+  activityInfo: {
+    flex: 1,
+  },
+  activityTitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  activityCategory: {
+    fontSize: 11,
+    color: "#FF5A00",
+    marginTop: 2,
+    marginBottom: 4,
+  },
+  activityDesc: {
+    fontSize: 12,
+    color: "#777",
   },
 });
