@@ -1,5 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React from "react";
+
 import {
   ScrollView,
   StyleSheet,
@@ -16,6 +18,7 @@ const ACTIVITIES = [
     category: "Engineering",
     desc: "Design and test parachutes to reduce landing speed",
     icon: "rocket-outline",
+    routeName: "ParachuteChallenge/parachute",
   },
   {
     id: "2",
@@ -23,6 +26,7 @@ const ACTIVITIES = [
     category: "Environmental Science",
     desc: "Measure and compare sound levels in different activities",
     icon: "options-outline",
+    routeName: "SoundPollutionHunter/sound",
   },
   {
     id: "3",
@@ -30,6 +34,7 @@ const ACTIVITIES = [
     category: "Physics",
     desc: "Test how air movement affects flexible materials",
     icon: "color-wand-outline",
+    routeName: "HandFanChallenge/handfan",
   },
   {
     id: "4",
@@ -37,6 +42,7 @@ const ACTIVITIES = [
     category: "Engineering",
     desc: "Design structures that withstand vibration",
     icon: "business-outline",
+    routeName: "EarthquakeChallenge/earthquake",
   },
   {
     id: "5",
@@ -44,6 +50,7 @@ const ACTIVITIES = [
     category: "Medical Science",
     desc: "Measure speed, smoothness, and coordination",
     icon: "pulse-outline",
+    routeName: "HumanPerformanceChallenge/humanperformance",
   },
   {
     id: "6",
@@ -51,6 +58,7 @@ const ACTIVITIES = [
     category: "Neuroscience",
     desc: "Measure reaction time and coordination",
     icon: "timer-outline",
+    routeName: "ReactionChallenge/reaction",
   },
   {
     id: "7",
@@ -58,10 +66,19 @@ const ACTIVITIES = [
     category: "Physiology",
     desc: "Measure lung capacity and breath control",
     icon: "water-outline",
+    routeName: "BreathChallenge/breath",
   },
 ];
 
 export default function Dashboard() {
+  const router = useRouter();
+  const handlePress = (item: any) => {
+    if (item.routeName) {
+      router.push(item.routeName);
+    } else {
+      console.log("No route defined for this activity");
+    }
+  };
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       {/* Dark Top Header */}
@@ -116,6 +133,7 @@ export default function Dashboard() {
             key={item.id}
             style={styles.activityCard}
             activeOpacity={0.7}
+            onPress={() => handlePress(item)}
           >
             <View style={styles.activityIconBox}>
               <Ionicons name={item.icon as any} size={24} color="#FFF" />
