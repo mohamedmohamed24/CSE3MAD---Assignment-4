@@ -31,7 +31,7 @@ const INSTRUCTIONS = [
   "Learn about drag force, terminal velocity, and impact physics",
 ];
 
-export default function SoundPollutionHunter() {
+export default function ParachuteChallenge() {
   const router = useRouter();
 
   // Track checkmarks for each equipment item independently
@@ -126,7 +126,11 @@ export default function SoundPollutionHunter() {
 
       {/* Fixed Footer Button */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.startButton} activeOpacity={0.8}>
+        <TouchableOpacity
+          onPress={() => router.push("/ParachuteChallenge/activitypage1")}
+          style={styles.startButton}
+          activeOpacity={0.8}
+        >
           <Text style={styles.startButtonText}>Start Activity</Text>
         </TouchableOpacity>
       </View>
