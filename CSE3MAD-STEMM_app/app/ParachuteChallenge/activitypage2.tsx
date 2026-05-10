@@ -4,19 +4,20 @@ import * as MediaLibrary from "expo-media-library";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ParachuteAdjustment() {
   const router = useRouter();
 
+  // State for user inputs
   const [dropHeight, setDropHeight] = useState("");
   const [fallTime, setFallTime] = useState("");
   const [videoUri, setVideoUri] = useState<string | null>(null);
@@ -55,9 +56,6 @@ export default function ParachuteAdjustment() {
       }
     }
   };
-
-  // State for user inputs
-
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "black" }}
@@ -74,12 +72,12 @@ export default function ParachuteAdjustment() {
 
         <View style={styles.headerTitleRow}>
           <View style={styles.stepCircle}>
-            <Text style={styles.stepNumber}>1</Text>
+            <Text style={styles.stepNumber}>2</Text>
           </View>
           <View>
-            <Text style={styles.headerTitle}>No Adjustment</Text>
+            <Text style={styles.headerTitle}>With Toy Adjustment</Text>
             <Text style={styles.headerSubtitle}>
-              Baselinedrop - no parachute
+              Parachute attached — same height
             </Text>
           </View>
         </View>
@@ -94,12 +92,9 @@ export default function ParachuteAdjustment() {
         {/* Instruction Alert Box (Green Theme) */}
         <View style={styles.alertBox}>
           <Text style={styles.alertText}>
-            🌳 Drop the toy{" "}
-            <Text style={{ fontWeight: "bold", color: "#B30000" }}>
-              without
-            </Text>{" "}
-            any parachute. Record the height you dropped it from and how long it
-            took to land.
+            🪂 Attach your parachute to the toy. Drop it from the{" "}
+            <Text style={{ fontWeight: "bold" }}>same height</Text> as before.
+            Record the height and time.
           </Text>
         </View>
 
@@ -139,13 +134,12 @@ export default function ParachuteAdjustment() {
             />
           </View>
         </View>
-
         <TouchableOpacity
           style={styles.recordButton}
           onPress={recordVideo}
           activeOpacity={0.7}
         >
-          <Ionicons name="videocam" size={24} color="#FF5A00" />
+          <Ionicons name="videocam" size={24} color="#00C853" />
           <Text style={styles.recordButtonText}>Record Impact Video</Text>
           {videoUri && (
             <Ionicons
@@ -163,7 +157,7 @@ export default function ParachuteAdjustment() {
         <TouchableOpacity
           style={styles.resultsButton}
           activeOpacity={0.8}
-          onPress={() => router.push("./activitypage2")} // Update this path as needed
+          onPress={() => router.push("./result")} // Update this path as needed
         >
           <Text style={styles.resultsButtonText}>See Results</Text>
           <Ionicons name="chevron-forward" size={20} color="#FFF" />
@@ -189,7 +183,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   stepCircle: {
-    backgroundColor: "#FB2C36",
+    backgroundColor: "#00C853", // Green from screenshot
     width: 32,
     height: 32,
     borderRadius: 16,
@@ -229,15 +223,16 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   alertBox: {
-    backgroundColor: "#FEF2F2", // Light green
+    backgroundColor: "#E8F5E9", // Light green
     borderWidth: 1,
-    borderColor: "#FFC9C9",
+    borderColor: "#C8E6C9",
     borderRadius: 12,
     padding: 15,
     marginBottom: 20,
   },
   alertText: {
-    color: "#9F0712",
+    color: "#2E7D32", // Dark green
+    fontSize: 14,
     lineHeight: 20,
   },
   whiteCard: {
@@ -283,7 +278,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   resultsButton: {
-    backgroundColor: "#FF5A00", // Mint green from screenshot
+    backgroundColor: "#00C853", // Mint green from screenshot
     borderRadius: 15,
     height: 56,
     flexDirection: "row",
@@ -308,13 +303,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#FFF",
     borderWidth: 2,
-    borderColor: "#FF5A00",
+    borderColor: "#00C853",
     borderRadius: 12,
     padding: 15,
     borderStyle: "dashed",
   },
   recordButtonText: {
-    color: "#FF5A00",
+    color: "#00C853",
     fontWeight: "bold",
     marginLeft: 10,
     fontSize: 16,
