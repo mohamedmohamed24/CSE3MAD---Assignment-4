@@ -1,13 +1,21 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Audio } from "expo-av";
+import {
+  AudioModule,
+  AudioPlayer,
+  createAudioPlayer,
+  RecordingPresets,
+  setAudioModeAsync,
+  useAudioRecorder,
+  useAudioRecorderState,
+} from "expo-audio";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -22,19 +30,40 @@ export default function SoundPollutionHunter() {
   const [actionText, setActionText] = useState("");
   const [decibels, setDecibels] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
-  const [recording, setRecording] = useState<Audio.Recording | null>(null);
+  const [currentUri, setCurrentUri] = useState<string | null>(null);
   const [results, setResults] = useState<SoundResult[]>([]);
 
-  // Track the highest dB
+  // Track the highest dB and the currently playing audio to prevent memory leaks
   const maxDbRef = useRef(0);
-  // Clean up recording if component unmounts to prevent memory leaks
+  const currentPlayerRef = useRef<AudioPlayer | null>(null);
+
+  // Initialize the new expo-audio recorder hook with metering enabled
+  const audioRecorder = useAudioRecorder({
+    ...RecordingPresets.HIGH_QUALITY,
+    isMeteringEnabled: true,
+  });
+  const recordingState = useAudioRecorderState(audioRecorder, 200);
+
+  // Clean up any active audio player if the component unmounts
   useEffect(() => {
     return () => {
-      if (recording) {
-        recording.stopAndUnloadAsync();
+      if (currentPlayerRef.current) {
+        currentPlayerRef.current.release();
       }
     };
-  }, [recording]);
+  }, []);
+
+  // Sync metering state with your decibel logic
+  useEffect(() => {
+    if (isRecording && recordingState.metering !== undefined) {
+      // Mapping Expo's metering to a displayable dB scale
+      const currentDb = Math.max(0, Math.round(recordingState.metering + 100));
+      setDecibels(currentDb);
+      if (currentDb > maxDbRef.current) {
+        maxDbRef.current = currentDb;
+      }
+    }
+  }, [recordingState.metering, isRecording]);
 
   const toggleRecording = async () => {
     if (isRecording) {
@@ -46,33 +75,21 @@ export default function SoundPollutionHunter() {
 
   const startRecording = async () => {
     try {
-      const permission = await Audio.requestPermissionsAsync();
-      if (permission.status !== "granted") return;
+      const permission = await AudioModule.requestRecordingPermissionsAsync();
+      if (!permission.granted) return;
 
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
+      await setAudioModeAsync({
+        allowsRecording: true,
+        playsInSilentMode: true,
       });
 
       maxDbRef.current = 0;
       setDecibels(0);
+      setCurrentUri(null);
 
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY,
-        (status) => {
-          if (status.isRecording && status.metering !== undefined) {
-            // Mapping Expo's metering (-160 to 0) to a displayable dB scale
-            const currentDb = Math.max(0, Math.round(status.metering + 100));
-            setDecibels(currentDb);
-            if (currentDb > maxDbRef.current) {
-              maxDbRef.current = currentDb;
-            }
-          }
-        },
-        200,
-      );
+      await audioRecorder.prepareToRecordAsync();
+      audioRecorder.record();
 
-      setRecording(recording);
       setIsRecording(true);
     } catch (err) {
       console.error("Failed to start recording", err);
@@ -80,32 +97,33 @@ export default function SoundPollutionHunter() {
   };
 
   const stopRecording = async () => {
-    setIsRecording(false);
-    setDecibels(maxDbRef.current);
+    try {
+      setIsRecording(false);
+      setDecibels(maxDbRef.current);
 
-    if (recording) {
-      await recording.stopAndUnloadAsync();
+      await audioRecorder.stop();
+      setCurrentUri(audioRecorder.uri || null);
+    } catch (err) {
+      console.error("Failed to stop recording", err);
     }
   };
 
   const handleSaveResult = () => {
-    if (!actionText.trim() || !recording) return;
-
-    const uri = recording.getURI();
+    if (!actionText.trim() || !currentUri) return;
 
     const newResult: SoundResult = {
       id: Date.now().toString(),
       action: actionText,
       db: decibels,
-      audioUri: uri,
+      audioUri: currentUri,
     };
 
     setResults([...results, newResult]);
 
-    // Reset UI for next measure
+    // Reset UI for the next measure
     setActionText("");
     setDecibels(0);
-    setRecording(null);
+    setCurrentUri(null);
     maxDbRef.current = 0;
   };
 
@@ -113,22 +131,35 @@ export default function SoundPollutionHunter() {
     setResults(results.filter((item) => item.id !== id));
   };
 
-  // Logic to play back the saved audio clip
   const playRecording = async (uri: string | null) => {
     if (!uri) return;
+
     try {
-      const { sound } = await Audio.Sound.createAsync(
-        { uri },
-        { shouldPlay: true },
-      );
-      // Unload sound when finished to free up system resources
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.isLoaded && status.didJustFinish) {
-          sound.unloadAsync();
-        }
+      // 1. Force the audio mode to playback.
+      // Sometimes staying in "recording" mode routes audio to the earpiece (very quiet) instead of the speaker.
+      await setAudioModeAsync({
+        allowsRecording: false,
+        playsInSilentMode: true,
       });
+
+      if (currentPlayerRef.current) {
+        await currentPlayerRef.current.release();
+      }
+
+      // 2. The constructor mismatch fix:
+      // Instead of the helper 'createAudioPlayer(uri)', we use the base source object.
+      const player = createAudioPlayer({ uri });
+
+      if (player) {
+        currentPlayerRef.current = player;
+        player.play();
+      }
     } catch (error) {
-      console.error("Error playing back the sound", error);
+      console.error("Playback failed:", error);
+      // If it still fails, the URI might need a prefix check
+      if (!uri.startsWith("file://")) {
+        console.log("URI might be missing file:// prefix");
+      }
     }
   };
 
@@ -182,7 +213,7 @@ export default function SoundPollutionHunter() {
             </Text>
           </TouchableOpacity>
 
-          {!isRecording && recording && (
+          {!isRecording && currentUri && (
             <TouchableOpacity
               style={styles.secondaryButton}
               onPress={handleSaveResult}
