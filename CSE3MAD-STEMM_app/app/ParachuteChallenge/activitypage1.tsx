@@ -163,7 +163,22 @@ export default function ParachuteAdjustment() {
         <TouchableOpacity
           style={styles.resultsButton}
           activeOpacity={0.8}
-          onPress={() => router.push("./activitypage2")} // Update this path as needed
+          onPress={() => {
+            if (!dropHeight || !fallTime) {
+              Alert.alert(
+                "Missing Data",
+                "Please enter height and time first.",
+              );
+              return;
+            }
+            router.push({
+              pathname: "./activitypage2",
+              params: {
+                heightNo: dropHeight,
+                timeNo: fallTime,
+              },
+            });
+          }}
         >
           <Text style={styles.resultsButtonText}>See Results</Text>
           <Ionicons name="chevron-forward" size={20} color="#FFF" />
