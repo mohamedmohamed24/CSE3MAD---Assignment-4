@@ -1,6 +1,16 @@
-# Welcome to your Expo app 👋
+# STEMM Lab App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a [Expo](https://expo.dev) project for the STEMM (Science, Technology, Engineering, Mathematics, Medical) Lab application. The app includes various interactive challenges and activities for students to explore different STEM concepts.
+
+## Features
+
+- **Human Performance Lab**: Measure movement smoothness, speed, and coordination during controlled activities
+- **Breath Challenge**: Breathing exercises and monitoring
+- **Earthquake Challenge**: Simulate and learn about earthquake detection
+- **Hand Fan Challenge**: Interactive hand fan activities
+- **Parachute Challenge**: Physics-based parachute experiments
+- **Reaction Challenge**: Test and improve reaction times
+- **Sound Pollution Hunter**: Environmental sound monitoring
 
 ## Get started
 
@@ -23,7 +33,50 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Running on Different Platforms
+
+**Android:**
+```bash
+npm run android
+```
+
+**iOS:**
+```bash
+npm run ios
+```
+
+**Web:**
+```bash
+npm run web
+```
+
+## Project Structure
+
+The app uses [file-based routing](https://docs.expo.dev/router/introduction). Navigate to different challenges through the app directory:
+
+- `app/HumanPerformanceChallenge/` - Human Performance Lab activities
+- `app/BreathChallenge/` - Breathing exercises
+- `app/EarthquakeChallenge/` - Earthquake simulation
+- `app/HandFanChallenge/` - Hand fan activities
+- `app/ParachuteChallenge/` - Parachute experiments
+- `app/ReactionChallenge/` - Reaction time tests
+- `app/SoundPollutionHunter/` - Sound monitoring
+
+## Human Performance Lab
+
+The Human Performance Lab feature allows students to:
+- Enter movement types (e.g., "Arm Circle - Fast")
+- Record movements using the phone's sensors
+- View movement variation measurements (± values)
+- Track smoothness ratings (Very Smooth, Smooth, Moderate, Rough, Very Rough)
+- Save and review recorded results
+- View performance statistics and summaries
+
+### Navigation Flow
+
+1. **Overview Screen** (`humanperformance.tsx`) - Shows equipment needed and instructions
+2. **Recording Screen** (`recording.tsx`) - Main recording interface with movement type input
+3. **Results Screen** (`results.tsx`) - Displays recorded data, statistics, and user feedback
 
 ## Get a fresh project
 

@@ -1,24 +1,21 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ParachuteAdjustment() {
   const router = useRouter();
-  const params = useLocalSearchParams();
-
-  const { heightNo, timeNo } = params;
 
   // State for user inputs
   const [dropHeight, setDropHeight] = useState("");
@@ -160,24 +157,7 @@ export default function ParachuteAdjustment() {
         <TouchableOpacity
           style={styles.resultsButton}
           activeOpacity={0.8}
-          onPress={() => {
-            if (!dropHeight || !fallTime) {
-              Alert.alert(
-                "Missing Data",
-                "Please enter height and time first.",
-              );
-              return;
-            }
-            router.push({
-              pathname: "./result",
-              params: {
-                heightNo: heightNo, // From Page 1
-                timeNo: timeNo, // From Page 1
-                heightWith: dropHeight, // From Page 2
-                timeWith: fallTime, // From Page 2
-              },
-            });
-          }}
+          onPress={() => router.push("./result")} // Update this path as needed
         >
           <Text style={styles.resultsButtonText}>See Results</Text>
           <Ionicons name="chevron-forward" size={20} color="#FFF" />

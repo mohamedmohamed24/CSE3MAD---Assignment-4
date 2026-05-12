@@ -99,13 +99,7 @@ export default function ActivityDetail() {
 
       {/* Start Button Fixed at Bottom */}
       <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.startButton}
-          activeOpacity={0.8}
-          onPress={() => {
-            router.push("./activity1");
-          }}
-        >
+        <TouchableOpacity style={styles.startButton} activeOpacity={0.8}>
           <Text style={styles.startButtonText}>Start Activity</Text>
         </TouchableOpacity>
       </View>

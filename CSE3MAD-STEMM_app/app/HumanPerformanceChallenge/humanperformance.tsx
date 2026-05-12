@@ -122,7 +122,11 @@ export default function SoundPollutionHunter() {
 
       {/* Fixed Footer Button */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.startButton} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.startButton}
+          activeOpacity={0.8}
+          onPress={() => router.push("/HumanPerformanceChallenge/recording")}
+        >
           <Text style={styles.startButtonText}>Start Activity</Text>
         </TouchableOpacity>
       </View>
