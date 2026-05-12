@@ -8,8 +8,10 @@ import {
   useAudioRecorder,
   useAudioRecorderState,
 } from "expo-audio";
+import { useNavigation } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -27,6 +29,7 @@ interface SoundResult {
 }
 
 export default function SoundPollutionHunter() {
+  const navigation = useNavigation<any>();
   const [actionText, setActionText] = useState("");
   const [decibels, setDecibels] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
@@ -146,8 +149,7 @@ export default function SoundPollutionHunter() {
         await currentPlayerRef.current.release();
       }
 
-      // 2. The constructor mismatch fix:
-      // Instead of the helper 'createAudioPlayer(uri)', we use the base source object.
+      // The constructor mismatch fix:
       const player = createAudioPlayer({ uri });
 
       if (player) {
@@ -156,7 +158,6 @@ export default function SoundPollutionHunter() {
       }
     } catch (error) {
       console.error("Playback failed:", error);
-      // If it still fails, the URI might need a prefix check
       if (!uri.startsWith("file://")) {
         console.log("URI might be missing file:// prefix");
       }
@@ -164,7 +165,18 @@ export default function SoundPollutionHunter() {
   };
 
   const handleCompleteActivity = () => {
-    console.log("Activity completed with results:", results);
+    if (results.length === 0) {
+      Alert.alert(
+        "No Data",
+        "Please record and save at least one sound first!",
+      );
+      return;
+    }
+    // Navigate to the Result screen and pass the array of recordings
+    console.log("Navigating with:", results);
+    navigation.navigate("SoundPollutionHunter/soundResult", {
+      results: results,
+    });
   };
 
   return (
